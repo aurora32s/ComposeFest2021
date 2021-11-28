@@ -1,6 +1,8 @@
 package com.haman.codelab2nd
 
+import android.nfc.tech.MifareUltralight
 import android.os.Bundle
+import android.view.RoundedCorner
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
@@ -18,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.layout.Layout
@@ -35,7 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CodeLab2NdTheme {
-                LayoutCodelab()
+                ChipPreview()
             }
         }
     }
@@ -111,7 +114,10 @@ fun LayoutCodelab () {
         // LazyList()
         // SimpleList()
         // BodyContent(Modifier.padding(innerPadding).padding(8.dp))
-        BodyContent2(Modifier.padding(innerPadding).padding(8.dp))
+        BodyContent2(
+            Modifier
+                .padding(innerPadding)
+                .padding(8.dp))
     }
 }
 
@@ -286,13 +292,19 @@ fun BodyContent2(modifier: Modifier = Modifier) {
     }
 }
 
+val topics = listOf(
+    "Arts & Crafts", "Beauty", "Books", "Business", "Comics", "Culinary",
+    "Design", "Fashion", "Film", "History", "Maths", "Music", "People", "Philosophy",
+    "Religion", "Social sciences", "Technology", "TV", "Writing"
+)
+
 @Composable
 fun StaggeredGrid (
     modifier: Modifier = Modifier,
     rows: Int = 3,
     content: @Composable () -> Unit
 ) {
-    Layout(
+    Layout (
         modifier = modifier,
         content = content
     ) { measurables, constraints ->
@@ -318,12 +330,72 @@ fun StaggeredGrid (
 
         // Grid's width is the widest row
         val width = rowWidths.maxOrNull()
-            ?.coerceIn(constraints.minWidth.rangeTo(constraints.maxWidth))
+            ?.coerceIn(constraints.minWidth.rangeTo(constraints.maxWidth)) ?: constraints.minWidth
 
         // Grid's height is the sum of the tallest element of each row
         // coerced to the height constraints
         val height = rowHeights.sumOf { it }
             .coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
 
+        // Y of each row, based on the height accumulation of previous rows
+        val rowY = IntArray(rows){ 0 }
+        for (i in 1 until rows) {
+            rowY[i] = rowY[i-1] + rowHeights[i-1]
+        }
+
+        // Set the size of the parent layout
+        layout(width, height) {
+            // x cord we have placed up to, per row
+            val rowX = IntArray(rows) {0}
+
+            placeables.forEachIndexed { index, placeable ->
+                val row = index % rows
+                placeable.placeRelative(
+                    x = rowX[row],
+                    y = rowY[row]
+                )
+                rowX[row] += placeable.width
+            }
+        }
+    }
+}
+
+@Composable
+fun Chip (modifier: Modifier = Modifier, text: String) {
+    Card(
+        modifier = modifier,
+        border = BorderStroke(color = Color.Black, width = Dp.Hairline),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Row (
+            modifier = Modifier.padding(8.dp, 4.dp, 8.dp, 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(modifier = Modifier
+                .size(16.dp, 16.dp)
+                .background(color = MaterialTheme.colors.secondary)
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(text = text)
+        }
+    }
+}
+
+@Composable
+fun BodyContent3 (modifier: Modifier = Modifier) {
+    Row(modifier = modifier.horizontalScroll(rememberScrollState())) {
+        StaggeredGrid(modifier = modifier, rows=10) {
+            for (topic in topics) {
+                Chip(modifier = Modifier.padding(8.dp), text = topic)
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ChipPreview () {
+    CodeLab2NdTheme {
+        BodyContent3()
     }
 }
