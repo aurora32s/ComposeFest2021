@@ -32,6 +32,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             CodeLab1StTheme {
                 // A surface container using the 'background' color from the theme
+//                Surface(color = MaterialTheme.colors.background) {
+//                    Greeting(name = "Android")
+//                }
                 MyApp()
             }
         }

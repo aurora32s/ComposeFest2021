@@ -228,6 +228,7 @@ fun TodoItemInput (
             Modifier
                 .padding(horizontal = 16.dp)
                 .padding(top = 16.dp)
+                .height(IntrinsicSize.Min)
         ) {
             TodoInputText(
                 text = text,
