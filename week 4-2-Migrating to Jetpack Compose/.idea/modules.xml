@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/week 4-2-Migrating to Jetpack Compose.iml" filepath="$PROJECT_DIR$/.idea/modules/week 4-2-Migrating to Jetpack Compose.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/week_4-2-Migrating_to_Jetpack_Compose.iml" filepath="$PROJECT_DIR$/.idea/modules/week_4-2-Migrating_to_Jetpack_Compose.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/week_4-2-Migrating_to_Jetpack_Compose.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/week_4-2-Migrating_to_Jetpack_Compose.app.iml" />
     </modules>
   </component>
 </project>

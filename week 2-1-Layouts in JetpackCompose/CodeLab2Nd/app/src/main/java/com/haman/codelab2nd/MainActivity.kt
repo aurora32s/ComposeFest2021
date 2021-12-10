@@ -114,10 +114,11 @@ fun LayoutCodelab () {
         // LazyList()
         // SimpleList()
         // BodyContent(Modifier.padding(innerPadding).padding(8.dp))
-        BodyContent2(
-            Modifier
-                .padding(innerPadding)
-                .padding(8.dp))
+//        BodyContent2(
+//            Modifier
+//                .padding(innerPadding)
+//                .padding(8.dp))
+        BodyContent3(Modifier.padding(innerPadding))
     }
 }
 
@@ -198,7 +199,7 @@ fun ImageList () {
             }
         }
         LazyColumn(state = scrollState) {
-            items(100) {
+            items(listSize) {
                 ImageListItem(index = it)
             }
         }
@@ -383,19 +384,24 @@ fun Chip (modifier: Modifier = Modifier, text: String) {
 
 @Composable
 fun BodyContent3 (modifier: Modifier = Modifier) {
-    Row(modifier = modifier.horizontalScroll(rememberScrollState())) {
-        StaggeredGrid(modifier = modifier, rows=10) {
-            for (topic in topics) {
-                Chip(modifier = Modifier.padding(8.dp), text = topic)
-            }
+    Row(modifier = modifier
+        .background(color = Color.LightGray)
+        .padding(16.dp)
+        .size(200.dp)
+        .horizontalScroll(rememberScrollState()),
+        content = {
+            StaggeredGrid(modifier = modifier, rows=5) {
+                for (topic in topics) {
+                    Chip(modifier = Modifier.padding(8.dp), text = topic)
+                }
         }
-    }
+    })
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ChipPreview () {
     CodeLab2NdTheme {
-        BodyContent3()
+        LayoutCodelab()
     }
 }
